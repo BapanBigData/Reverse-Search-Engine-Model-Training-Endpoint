@@ -9,4 +9,5 @@ pymongo==4.2.0
 annoy==1.17.1
 dnspython
 pillow
+python-dotenv
 -e .
