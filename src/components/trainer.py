@@ -4,6 +4,7 @@ from torch import nn
 import torch
 import numpy as np
 from src.components.model import NeuralNet
+from src.logger.logger import logging
 from typing import Dict
 from tqdm import tqdm
 
@@ -21,8 +22,10 @@ class Trainer:
         self.evaluation = self.config.Evaluation
 
     def train_model(self):
+        logging.info("Start training...\n")
         print("Start training...\n")
         for epoch in range(self.config.EPOCHS):
+            logging.info(f"Epoch Number : {epoch}")
             print(f'Epoch Number : {epoch}')
             running_loss = 0.0
             running_correct = 0
@@ -41,10 +44,15 @@ class Trainer:
             loss = running_loss / len(self.trainLoader.dataset)
             accuracy = 100. * running_correct / len(self.trainLoader.dataset)
 
-            val_loss, val_accuracy = self.evaluate()
+            val_loss, val_accuracy = self.evaluate(validate=True)
+            
+            logging.info(f"Train Acc : {accuracy:.2f}, Train Loss : {loss:.4f} ||"
+                    f"Validation Acc : {val_accuracy:.2f}, Validation Loss : {val_loss:.4f}\n")
 
-            print(f"Train Acc : {accuracy:.2f}, Train Loss : {loss:.4f}, "
-                    f"Validation Acc : {val_accuracy:.2f}, Validation Loss : {val_loss:.4f}")
+            print(f"Train Acc : {accuracy:.2f}, Train Loss : {loss:.4f} ||"
+                    f"Validation Acc : {val_accuracy:.2f}, Validation Loss : {val_loss:.4f}\n")
+        
+        logging.info("Training complete!...\n")
 
         print("Training complete!...\n")
 
@@ -56,7 +64,7 @@ class Trainer:
         val_accuracy = []
         val_loss = []
 
-        loader = self.testLoader if not validate else self.validLoader
+        loader = self.validLoader if validate else self.testLoader
 
         with torch.no_grad():
             for batch in tqdm(loader):
@@ -72,11 +80,15 @@ class Trainer:
 
         val_loss = np.mean(val_loss)
         val_accuracy = np.mean(val_accuracy)
+        
+        logging.info(f"Test Acc: {val_accuracy} || Test loss: {val_loss}\n")
+        print(f"Test Acc: {val_accuracy} || Test loss: {val_loss}\n")
 
         return val_loss, val_accuracy
 
     def save_model_in_pth(self):
         model_store_path = self.config.MODEL_STORE_PATH
+        logging.info(f"Saving Model at {model_store_path}")
         print(f"Saving Model at {model_store_path}")
         torch.save(self.model.state_dict(), model_store_path)
 

@@ -65,7 +65,7 @@ class ImageFolderConfig:
         self.IMAGE_SIZE = 256
         self.LABEL_MAP = {}
         self.BUCKET: str = os.environ["AWS_BUCKET_NAME"]
-        self.S3_LINK = "https://{0}.s3.ap-south-1.amazonaws.com/images/{1}/{2}"
+        self.S3_LINK = "https://{0}.s3.us-east-1.amazonaws.com/images/{1}/{2}"
 
     def get_image_folder_config(self):
         return self.__dict__
@@ -89,8 +89,8 @@ class AnnoyConfig:
 
 class s3Config:
     def __init__(self):
-        self.ACCESS_KEY_ID = os.environ["ACCESS_KEY_ID"]
-        self.SECRET_KEY = os.environ["AWS_SECRET_KEY"]
+        self.ACCESS_KEY_ID = os.environ["AWS_ACCESS_KEY_ID"]
+        self.SECRET_KEY = os.environ["AWS_SECRET_ACCESS_KEY"]
         self.REGION_NAME = "us-east-1"
         self.BUCKET_NAME = os.environ["MODEL_REGISTRY"]
         self.KEY = "models"

@@ -28,8 +28,7 @@ class NeuralNet(nn.Module):
             nn.ReLU(),
             nn.Conv2d(512, 32, kernel_size=3, padding=1),   # Conv2-32
             nn.ReLU(),
-            nn.Conv2d(32, 6, kernel_size=3, padding=1),     # Conv3-6
-            nn.ReLU()
+            nn.Conv2d(32, 6, kernel_size=3, padding=1)      # Conv3-6
         )
 
         # Fully connected layer
@@ -45,7 +44,7 @@ class NeuralNet(nn.Module):
         return x
 
 
-if __name__ == '__main__':
-    device = "cuda" if torch.cuda.is_available() else "cpu"
-    net = NeuralNet().to(device)
-    summary(net, input_size=[1, 3, 256, 256])
+# if __name__ == '__main__':
+#     device = "cuda" if torch.cuda.is_available() else "cpu"
+#     net = NeuralNet().to(device)
+#     summary(net, input_size=[1, 3, 256, 256])

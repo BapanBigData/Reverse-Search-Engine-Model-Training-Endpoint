@@ -1,4 +1,5 @@
 from src.entities.config_entities import DataIngestionConfig
+from src.logger.logger import logging
 from from_root import from_root
 import splitfolders
 import os
@@ -18,6 +19,7 @@ class DataIngestion:
 
         """
         try:
+            logging.info("\n====================== Fetching Data ==============================\n")
             print("\n====================== Fetching Data ==============================\n")
             data_path = os.path.join(from_root(), self.config.RAW, self.config.PREFIX)
             
@@ -26,8 +28,10 @@ class DataIngestion:
                 print(f"Created directory: {data_path}")
             
             #print(f"Data path for AWS sync: {data_path}")
+            logging.info(f"Data path for AWS sync: {data_path}")
             
             os.system(f'aws s3 sync s3://{self.config.BUCKET}/images/ "{data_path}" --no-progress')
+            logging.info("\n====================== Fetching Completed ==========================\n")
             print("\n====================== Fetching Completed ==========================\n")
 
         except Exception as e:
@@ -55,15 +59,15 @@ class DataIngestion:
         return {"Response": "Completed Data Ingestion"}
 
 
-if __name__ == "__main__":
-    paths = ["data", r"data/raw", r"data/splitted", r"data/embeddings",
-            "model", r"model/benchmark", r"model/finetuned"]
+# if __name__ == "__main__":
+#     paths = ["data", r"data/raw", r"data/splitted", r"data/embeddings",
+#             "model", r"model/benchmark", r"model/finetuned"]
 
-    for folder in paths:
-        path = os.path.join(from_root(), folder)
-        print(path)
-        if not os.path.exists(path):
-            os.mkdir(folder)
+#     for folder in paths:
+#         path = os.path.join(from_root(), folder)
+#         print(path)
+#         if not os.path.exists(path):
+#             os.mkdir(folder)
 
-    dc = DataIngestion()
-    print(dc.run_step())
+#     dc = DataIngestion()
+#     print(dc.run_step())

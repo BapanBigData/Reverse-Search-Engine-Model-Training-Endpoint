@@ -40,7 +40,7 @@ class Annoy:
         self.result = self.mongo.get_collection_documents()["Info"]
 
     def build_annoy_format(self):
-        Ann = CustomAnnoy(256, 'euclidean')
+        Ann = CustomAnnoy(384, 'euclidean')
         print("Creating Ann for predictions : ")
         for i, record in tqdm(enumerate(self.result), total=8677):
             Ann.add_item(i, record["images"], record["s3_link"])

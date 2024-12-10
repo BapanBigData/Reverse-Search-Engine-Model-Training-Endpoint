@@ -33,8 +33,10 @@ class ImageFolder(Dataset):
         for class_path in file_list:
             path = os.path.join(self.config.ROOT_DIR, f"{class_path}")
             images = os.listdir(path)
+            
             for image in tqdm(images):
                 image_path = Path(f"""{self.config.ROOT_DIR}/{class_path}/{image}""")
+                
                 self.image_records.append(self.record(img=image_path,
                                                     label=self.config.LABEL_MAP[class_path],
                                                     s3_link=self.config.S3_LINK.format(self.config.BUCKET, class_path,
@@ -61,6 +63,7 @@ class ImageFolder(Dataset):
 
         if len(images.getbands()) < 3:
             images = images.convert('RGB')
+            
         images = np.array(self.transform(images))
         targets = torch.from_numpy(np.array(targets))
         images = torch.from_numpy(images)
@@ -79,7 +82,11 @@ class EmbeddingGenerator:
 
     def load_model(self):
         model = self.model.to(self.device)
-        model.load_state_dict(torch.load(self.config.MODEL_STORE_PATH, map_location=self.device))
+        
+        model.load_state_dict(torch.load(self.config.MODEL_STORE_PATH, 
+                                            map_location=self.device, 
+                                            weights_only=True))
+        
         return nn.Sequential(*list(model.children())[:-1])
 
     def run_step(self, batch_size, image, label, s3_link):
