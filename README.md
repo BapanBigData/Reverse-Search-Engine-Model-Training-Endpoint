@@ -149,14 +149,6 @@ The **Model Training Endpoint** performs the following tasks:
    - Configure S3 bucket credentials in a `.env` file.  
    - Set MongoDB connection strings and ANN paths.
 
-4. **Run Data Ingestion**:  
-   python data_ingestion.py
-
-5. **Run Data Preprocessing**:  
-   python data_preprocessing.py
-
-6. **Train the Model**:  
-   python train_model.py
-
-7. **Generate Embeddings**:  
-   python generate_embeddings.py
+4. **Run the Pipeline to Train the Model**:  
+   python src/pipeline/pipeline.py
+   
